@@ -62,7 +62,7 @@ const cities = [randomCity(), randomCity(), randomCity()];
   providedIn: 'root',
 })
 export class FakeHttpService {
-  fetchTeachers$ = timer(500).pipe(map(() => teachers));
-  fetchStudents$ = timer(500).pipe(map(() => students));
-  fetchCities$ = timer(500).pipe(map(() => cities));
+  fetchTeachers$ = timer(1).pipe(map(() => teachers));
+  fetchStudents$ = timer(1).pipe(map(() => students));
+  fetchCities$ = timer(1).pipe(map(() => cities));
 }
