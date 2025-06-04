@@ -8,11 +8,31 @@ import {
   TemplateRef,
 } from '@angular/core';
 
+export class TypeToken<T> {
+  private _typeTag: T;
+
+  constructor() {
+    this._typeTag = null as any;
+  }
+}
+
 @Directive({
   selector: 'ng-template [card-list-item]',
-  standalone: true,
 })
-export class CardListItemDirective {}
+export class CardListItemDirective<T> {
+  dataType = input.required<TypeToken<T>>();
+
+  static ngTemplateContextGuard<T>(
+    dir: CardListItemDirective<T>,
+    ctx: any,
+  ): ctx is CardListItemContext<T> {
+    return true;
+  }
+}
+
+export interface CardListItemContext<T> {
+  $implicit: T;
+}
 
 @Component({
   selector: 'app-card',

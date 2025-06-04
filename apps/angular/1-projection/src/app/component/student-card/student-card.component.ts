@@ -11,9 +11,11 @@ import {
 } from '../../data-access/fake-http.service';
 import { StudentStore } from '../../data-access/student.store';
 import { CardType } from '../../model/card.model';
+import { Teacher } from '../../model/teacher.model';
 import {
   CardComponent,
   CardListItemDirective,
+  TypeToken,
 } from '../../ui/card/card.component';
 import { ListItemComponent } from '../../ui/list-item/list-item.component';
 
@@ -28,8 +30,8 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
         height="200"
         alt="Student Image" />
 
-      <ng-template card-list-item let-student>
-        <app-list-item [id]="student.id" (deleted)="deleteStudent(student.id)">
+      <ng-template card-list-item let-student [dataType]="studentType">
+        <app-list-item (deleted)="deleteStudent(student.id)">
           {{ student.firstName }} - {{ student.lastName }}
         </app-list-item>
       </ng-template>
@@ -51,6 +53,7 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StudentCardComponent implements OnInit {
+  studentType = new TypeToken<Teacher>();
   private http = inject(FakeHttpService);
   private store = inject(StudentStore);
 

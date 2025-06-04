@@ -1,3 +1,4 @@
+import { DataSource } from '@angular/cdk/table';
 import { NgOptimizedImage } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
@@ -5,10 +6,11 @@ import {
   randTeacher,
 } from '../../data-access/fake-http.service';
 import { TeacherStore } from '../../data-access/teacher.store';
-import { CardType } from '../../model/card.model';
+import { Student } from '../../model/student.model';
 import {
   CardComponent,
   CardListItemDirective,
+  TypeToken,
 } from '../../ui/card/card.component';
 import { ListItemComponent } from '../../ui/list-item/list-item.component';
 
@@ -23,8 +25,8 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
         height="200"
         alt="Teacher Image" />
 
-      <ng-template card-list-item let-teacher>
-        <app-list-item [id]="teacher.id" (deleted)="deleteTeacher(teacher.id)">
+      <ng-template card-list-item [dataType]="studentType" let-teacher>
+        <app-list-item (deleted)="deleteTeacher(teacher.id)">
           {{ teacher.firstName }} - {{ teacher.lastName }}
         </app-list-item>
       </ng-template>
@@ -42,14 +44,15 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
     NgOptimizedImage,
     CardListItemDirective,
     ListItemComponent,
+    CardListItemDirective,
   ],
 })
 export class TeacherCardComponent implements OnInit {
+  studentType = new TypeToken<Student>();
   private http = inject(FakeHttpService);
   private store = inject(TeacherStore);
 
   teachers = this.store.teachers;
-  cardType = CardType.TEACHER;
 
   ngOnInit(): void {
     this.http.fetchTeachers$.subscribe((t) => this.store.addAll(t));
@@ -62,4 +65,7 @@ export class TeacherCardComponent implements OnInit {
   deleteTeacher(id: number) {
     this.store.deleteOne(id);
   }
+
+  protected readonly DataSource = DataSource;
+  protected readonly TeacherStore = TeacherStore;
 }
